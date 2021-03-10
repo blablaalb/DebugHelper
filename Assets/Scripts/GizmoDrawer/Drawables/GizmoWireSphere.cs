@@ -4,7 +4,7 @@ using UnityEngine;
 namespace GizmoDrawer.Drawables
 {
     [Serializable]
-    public class GizmoWireSphere : IDrawable
+    internal class GizmoWireSphere : IDrawable
     {
         private readonly Color _color;
 

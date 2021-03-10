@@ -1,13 +1,37 @@
 ﻿using System.Collections.Generic;
 using GizmoDrawer.Drawables;
+using System.Collections;
 using UnityEngine;
+using System;
 
 namespace GizmoDrawer
 {
     public class Drawer : MonoBehaviour
     {
+        private struct DrawableAndTimePair : IEquatable<DrawableAndTimePair>
+        {
+            public readonly IDrawable Drawable;
+            public readonly float Time;
+
+            public DrawableAndTimePair(IDrawable drawable, float time)
+            {
+                Drawable = drawable;
+                Time = time;
+            }
+
+            public bool Equals(DrawableAndTimePair other)
+            {
+                return other.Drawable.Equals(this.Drawable) && other.Time.Equals(this.Time);
+            }
+
+            public bool Equals(object other)
+            {
+                return other is DrawableAndTimePair dtp && dtp.Drawable.Equals(this.Drawable) && dtp.Time.Equals(this.Time);
+            }
+        }
+
         private static Drawer _instance;
-        private List<IDrawable> _drawables;
+        private List<DrawableAndTimePair> _timedDrawable;
 
         public static Drawer Instance
         {
@@ -31,8 +55,8 @@ namespace GizmoDrawer
 
         internal void Awake()
         {
-            if (_drawables == null)
-                _drawables = new List<IDrawable>();
+            if (_timedDrawable == null)
+                _timedDrawable = new List<DrawableAndTimePair>();
         }
 
         internal void OnDrawGizmos()
@@ -40,46 +64,61 @@ namespace GizmoDrawer
             DrawDrawables();
         }
 
-        public void DrawCube(Vector3 origin, Vector3 size, Color color = new Color())
+        public void DrawCube(Vector3 origin, Vector3 size, Color color = new Color(), float time = 1f)
         {
             color = color == default(Color) ? Gizmos.color : color;
             GizmoCube gizmoCube = new GizmoCube(origin, size, color);
-            Add(gizmoCube);
+            Add(gizmoCube, time);
         }
 
-        public void DrawWireCube(Vector3 origin, Vector3 size, Color color = new Color())
+        public void DrawWireCube(Vector3 origin, Vector3 size, Color color = new Color(), float time = 1f)
         {
             color = color == default(Color) ? Gizmos.color : color;
             GizmoWireCube gizmoWireCube = new GizmoWireCube(origin, size, color);
-            Add(gizmoWireCube);
+            Add(gizmoWireCube, time);
         }
 
-        public void DrawSphere(Vector3 center, float radius, Color color = new Color())
+        public void DrawSphere(Vector3 center, float radius, Color color = new Color(), float time = 1f)
         {
             color = color == default(Color) ? Gizmos.color : color;
             GizmoSphere gizmoSphere = new GizmoSphere(center, radius, color);
-            Add(gizmoSphere);
+            Add(gizmoSphere, time);
         }
 
-        public void DrawWireSphere(Vector3 center, float radius, Color color = new Color())
+        public void DrawWireSphere(Vector3 center, float radius, Color color = new Color(), float time = 1f)
         {
             color = color == default(Color) ? Gizmos.color : color;
             GizmoWireSphere gizmoWireSphere = new GizmoWireSphere(center, radius, color);
-            Add(gizmoWireSphere);
+            Add(gizmoWireSphere, time);
         }
 
         private void DrawDrawables()
         {
-            if (_drawables != null)
-                foreach (IDrawable drawable in _drawables)
+            if (_timedDrawable != null)
+            {
+                DrawableAndTimePair[] timedDrawableCopy = new DrawableAndTimePair[_timedDrawable.Count];
+                _timedDrawable.CopyTo(timedDrawableCopy);
+                foreach (DrawableAndTimePair dtp in timedDrawableCopy)
                 {
-                    drawable.Draw();
+                    dtp.Drawable.Draw();
                 }
+            }
         }
 
-        private void Add(IDrawable drawable)
+        private void Add(IDrawable drawable, float time)
         {
-            if (_drawables != null && !_drawables.Contains(drawable)) _drawables.Add(drawable);
+            DrawableAndTimePair timedDrawable = new DrawableAndTimePair(drawable, time);
+            if (_timedDrawable != null && !_timedDrawable.Contains(timedDrawable))
+            {
+                _timedDrawable.Add(timedDrawable);
+                StartCoroutine(RemoveDrawableCountdownCoroutine(timedDrawable));
+            }
+        }
+
+        private IEnumerator RemoveDrawableCountdownCoroutine(DrawableAndTimePair dtp)
+        {
+            yield return new WaitForSeconds(dtp.Time);
+            _timedDrawable.Remove(dtp);
         }
     }
 }
