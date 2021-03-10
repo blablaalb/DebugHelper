@@ -14,6 +14,8 @@ public class GizmoDrawerTester : MonoBehaviour
         {
             GizmoDrawer.Instance.DrawCube(Vector3.zero, Vector3.one);
             GizmoDrawer.Instance.DrawWireCube(Vector3.zero, Vector3.one);
+            GizmoDrawer.Instance.DrawSphere(Vector3.zero, 1f);
+            GizmoDrawer.Instance.DrawWireSphere(Vector3.zero, 1f);
         }
     }
 }

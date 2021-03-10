@@ -41,22 +41,32 @@ public class GizmoDrawer : MonoBehaviour
         DrawDrawables();
     }
 
-    public void DrawCube(Vector3 origin, Vector3 size)
+    public void DrawCube(Vector3 origin, Vector3 size, Color color = new Color())
     {
-        GizmoCube gizmoCube = new GizmoCube(origin, size);
-        if (!_drawables.Contains(gizmoCube))
-        {
-            _drawables.Add(gizmoCube);
-        }
+        color = color == default(Color) ? Gizmos.color : color;
+        GizmoCube gizmoCube = new GizmoCube(origin, size, color);
+        Add(gizmoCube);
     }
 
-    public void DrawWireCube(Vector3 origin, Vector3 size)
+    public void DrawWireCube(Vector3 origin, Vector3 size, Color color = new Color())
     {
-        GizmoWireCube gizmoCube = new GizmoWireCube(origin, size);
-        if (!_drawables.Contains(gizmoCube))
-        {
-            _drawables.Add(gizmoCube);
-        }
+        color = color == default(Color) ? Gizmos.color : color;
+        GizmoWireCube gizmoWireCube = new GizmoWireCube(origin, size, color);
+        Add(gizmoWireCube);
+    }
+
+    public void DrawSphere(Vector3 center, float radius, Color color = new Color())
+    {
+        color = color == default(Color) ? Gizmos.color : color;
+        GizmoSphere gizmoSphere = new GizmoSphere(center, radius, color);
+        Add(gizmoSphere);
+    }
+
+    public void DrawWireSphere(Vector3 center, float radius, Color color = new Color())
+    {
+        color = color == default(Color) ? Gizmos.color : color;
+        GizmoWireSphere gizmoWireSphere = new GizmoWireSphere(center, radius, color);
+        Add(gizmoWireSphere);
     }
 
     private void DrawDrawables()
@@ -66,5 +76,10 @@ public class GizmoDrawer : MonoBehaviour
             {
                 drawable.Draw();
             }
+    }
+
+    private void Add(IDrawable drawable)
+    {
+        if (_drawables != null && !_drawables.Contains(drawable)) _drawables.Add(drawable);
     }
 }

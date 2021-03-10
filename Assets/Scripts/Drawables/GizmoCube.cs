@@ -4,18 +4,24 @@ using System;
 [Serializable]
 public class GizmoCube : IDrawable
 {
+    private readonly Color _color;
+
     public readonly Vector3 Origin;
     public readonly Vector3 Size;
 
-    public GizmoCube(Vector3 origin, Vector3 size)
+    public GizmoCube(Vector3 origin, Vector3 size, Color color)
     {
+        _color = color;
         Origin = origin;
         Size = size;
     }
 
     public void Draw()
     {
+        Color previousColor = Gizmos.color;
+        Gizmos.color = _color;
         Gizmos.DrawCube(Origin, Size);
+        Gizmos.color = previousColor;
     }
 
     public bool Equals(IDrawable other)
