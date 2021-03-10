@@ -21,6 +21,12 @@ public class GizmoCube : IDrawable
     public bool Equals(IDrawable other)
     {
         GizmoCube otherGC = other as GizmoCube;
-        return otherGC.Equals(this.Origin) && otherGC.Equals(this.Size);
+        return otherGC != null && otherGC.Origin.Equals(this.Origin) && otherGC.Size.Equals(this.Size);
+    }
+
+    public override bool Equals(object other)
+    {
+        GizmoCube otherGC = other as GizmoCube;
+        return otherGC != null && otherGC.Origin.Equals(this.Origin) && otherGC.Size.Equals(this.Size);
     }
 }

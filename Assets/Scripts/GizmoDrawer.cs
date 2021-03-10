@@ -32,7 +32,7 @@ public class GizmoDrawer : MonoBehaviour
 
     internal void Awake()
     {
-            if (_drawables == null)
+        if (_drawables == null)
             _drawables = new List<IDrawable>();
     }
 
@@ -44,6 +44,15 @@ public class GizmoDrawer : MonoBehaviour
     public void DrawCube(Vector3 origin, Vector3 size)
     {
         GizmoCube gizmoCube = new GizmoCube(origin, size);
+        if (!_drawables.Contains(gizmoCube))
+        {
+            _drawables.Add(gizmoCube);
+        }
+    }
+
+    public void DrawWireCube(Vector3 origin, Vector3 size)
+    {
+        GizmoWireCube gizmoCube = new GizmoWireCube(origin, size);
         if (!_drawables.Contains(gizmoCube))
         {
             _drawables.Add(gizmoCube);

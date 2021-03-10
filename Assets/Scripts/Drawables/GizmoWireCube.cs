@@ -20,7 +20,13 @@ public class GizmoWireCube : IDrawable
 
     public bool Equals(IDrawable other)
     {
-        GizmoWireCube otherGWC = other as GizmoWireCube;
-        return otherGWC.Equals(this.Origin) && otherGWC.Equals(this.Size);
+        GizmoWireCube otherGC = other as GizmoWireCube;
+        return otherGC != null && otherGC.Origin.Equals(this.Origin) && otherGC.Size.Equals(this.Size);
+    }
+
+    public override bool Equals(object other)
+    {
+        GizmoWireCube otherGC = other as GizmoWireCube;
+        return otherGC != null && otherGC.Origin.Equals(this.Origin) && otherGC.Size.Equals(this.Size);
     }
 }

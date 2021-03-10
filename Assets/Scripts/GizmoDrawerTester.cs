@@ -9,10 +9,11 @@ public class GizmoDrawerTester : MonoBehaviour
 {
     internal void Start()
     {
-        GizmoDrawer.Instance.DrawCube(Vector3.zero, Vector3.one);
-        int count = 2;
-        for (int i = 0; i < 2; i++)
+        int count = 100;
+        for (int i = 0; i < count; i++)
         {
+            GizmoDrawer.Instance.DrawCube(Vector3.zero, Vector3.one);
+            GizmoDrawer.Instance.DrawWireCube(Vector3.zero, Vector3.one);
         }
     }
 }
