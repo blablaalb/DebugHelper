@@ -24,10 +24,10 @@ namespace GizmoDrawer.Drawables
         {
             Color previousColor = Gizmos.color;
             Matrix4x4 previousMatrix4x4 = Gizmos.matrix;
-            Matrix4x4 m4x4 = Matrix4x4.TRS(Vector3.zero, Rotation, Vector3.one);
+            Matrix4x4 m4x4 = Matrix4x4.TRS(Center, Rotation, Vector3.one);
             Gizmos.color = _color;
             Gizmos.matrix = m4x4;
-            Gizmos.DrawWireSphere(Center, Radius);
+            Gizmos.DrawWireSphere(Vector3.zero, Radius);
             Gizmos.matrix = previousMatrix4x4;
             Gizmos.color = previousColor;
         }
