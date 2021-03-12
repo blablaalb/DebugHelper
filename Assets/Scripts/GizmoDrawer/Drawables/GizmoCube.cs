@@ -24,7 +24,7 @@ namespace GizmoDrawer.Drawables
         {
             Color previousColor = Gizmos.color;
             Matrix4x4 previousMatrix4x4 = Gizmos.matrix;
-            Matrix4x4 m4x4 = Matrix4x4.TRS(Origin, Rotation, Vector3.one);
+            Matrix4x4 m4x4 = Matrix4x4.TRS(Vector3.zero, Rotation, Vector3.one);
             Gizmos.color = _color;
             Gizmos.matrix = m4x4;
             Gizmos.DrawCube(Origin, Size);
