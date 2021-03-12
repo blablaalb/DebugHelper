@@ -64,31 +64,35 @@ namespace GizmoDrawer
             DrawDrawables();
         }
 
-        public void DrawCube(Vector3 origin, Vector3 size, Color color = new Color(), float time = 1f)
+        public void DrawCube(Vector3 origin, Vector3 size, Quaternion rotation = new Quaternion(), Color color = new Color(), float time = 1f)
         {
             color = color == default(Color) ? Gizmos.color : color;
-            GizmoCube gizmoCube = new GizmoCube(origin, size, color);
+            rotation = rotation.Equals(default(Quaternion)) ? Quaternion.identity : rotation;
+            GizmoCube gizmoCube = new GizmoCube(origin, size, rotation, color);
             Add(gizmoCube, time);
         }
 
-        public void DrawWireCube(Vector3 origin, Vector3 size, Color color = new Color(), float time = 1f)
+        public void DrawWireCube(Vector3 origin, Vector3 size, Quaternion rotation = new Quaternion(), Color color = new Color(), float time = 1f)
         {
             color = color == default(Color) ? Gizmos.color : color;
-            GizmoWireCube gizmoWireCube = new GizmoWireCube(origin, size, color);
+            rotation = rotation.Equals(default(Quaternion)) ? Quaternion.identity : rotation;
+            GizmoWireCube gizmoWireCube = new GizmoWireCube(origin, size, rotation, color);
             Add(gizmoWireCube, time);
         }
 
-        public void DrawSphere(Vector3 center, float radius, Color color = new Color(), float time = 1f)
+        public void DrawSphere(Vector3 center, float radius, Quaternion rotation = new Quaternion(), Color color = new Color(), float time = 1f)
         {
             color = color == default(Color) ? Gizmos.color : color;
-            GizmoSphere gizmoSphere = new GizmoSphere(center, radius, color);
+            rotation = rotation.Equals(default(Quaternion)) ? Quaternion.identity : rotation;
+            GizmoSphere gizmoSphere = new GizmoSphere(center, radius, rotation, color);
             Add(gizmoSphere, time);
         }
 
-        public void DrawWireSphere(Vector3 center, float radius, Color color = new Color(), float time = 1f)
+        public void DrawWireSphere(Vector3 center, float radius, Quaternion rotation = new Quaternion(), Color color = new Color(), float time = 1f)
         {
             color = color == default(Color) ? Gizmos.color : color;
-            GizmoWireSphere gizmoWireSphere = new GizmoWireSphere(center, radius, color);
+            rotation = rotation.Equals(default(Quaternion)) ? Quaternion.identity : rotation;
+            GizmoWireSphere gizmoWireSphere = new GizmoWireSphere(center, radius, rotation, color);
             Add(gizmoWireSphere, time);
         }
 
