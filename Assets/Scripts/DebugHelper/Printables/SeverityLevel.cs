@@ -1,4 +1,4 @@
-namespace GizmoDrawer.Printables
+namespace DebugHelper.Printables
 {
     public enum SeverityLevel
     {

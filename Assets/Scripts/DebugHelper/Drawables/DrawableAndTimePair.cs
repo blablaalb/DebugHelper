@@ -1,10 +1,10 @@
 using System.Collections.Generic;
-using GizmoDrawer.Drawables;
+using DebugHelper.Drawables;
 using System.Collections;
 using UnityEngine;
 using System;
 
-namespace GizmoDrawer.Drawables
+namespace DebugHelper.Drawables
 {
     public struct DrawableAndTimePair : IEquatable<DrawableAndTimePair>
     {

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace GizmoDrawer.Drawables
+namespace DebugHelper.Drawables
 {
     [Serializable]
     internal class GizmoWireCube : IDrawable

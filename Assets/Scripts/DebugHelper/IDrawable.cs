@@ -1,6 +1,6 @@
 using System;
 
-namespace GizmoDrawer
+namespace DebugHelper
 {
     public interface IDrawable : IEquatable<IDrawable>
     {

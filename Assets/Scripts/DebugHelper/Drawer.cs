@@ -2,14 +2,13 @@
 using System.Collections;
 using UnityEngine;
 using System;
-using GizmoDrawer.Printables;
-using GizmoDrawer.Drawables;
+using DebugHelper.Printables;
+using DebugHelper.Drawables;
 
-namespace GizmoDrawer
+namespace DebugHelper
 {
     public class Drawer : MonoBehaviour
     {
-        private Writer _writer;
         private static Drawer _instance;
         private List<DrawableAndTimePair> _timedDrawable;
 
@@ -22,11 +21,11 @@ namespace GizmoDrawer
                     _instance = FindObjectOfType<Drawer>();
                     if (_instance == null)
                     {
-                        GameObject gizmoDrawerGO = new GameObject();
-                        gizmoDrawerGO.name = "Gizmo Drawer";
-                        gizmoDrawerGO.transform.position = Vector3.zero;
-                        gizmoDrawerGO.transform.rotation = Quaternion.identity;
-                        _instance = gizmoDrawerGO.AddComponent(typeof(Drawer)) as Drawer;
+                        GameObject DebugHelperGO = new GameObject();
+                        DebugHelperGO.name = "Gizmo Drawer";
+                        DebugHelperGO.transform.position = Vector3.zero;
+                        DebugHelperGO.transform.rotation = Quaternion.identity;
+                        _instance = DebugHelperGO.AddComponent(typeof(Drawer)) as Drawer;
                     }
                 }
                 return _instance;
@@ -37,7 +36,6 @@ namespace GizmoDrawer
         {
             if (_timedDrawable == null)
                 _timedDrawable = new List<DrawableAndTimePair>();
-            _writer = new Writer();
         }
 
 #if UNITY_EDITOR
@@ -46,11 +44,6 @@ namespace GizmoDrawer
             DrawDrawables();
         }
 #endif 
-
-        internal void OnGUI()
-        {
-            _writer.OnGUI();
-        }
 
         public void DrawCube(Vector3 origin, Vector3 size, Quaternion rotation = new Quaternion(), Color color = new Color(), float time = 1f)
         {

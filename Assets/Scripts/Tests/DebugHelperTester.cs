@@ -1,12 +1,19 @@
 ﻿using UnityEngine;
-using GizmoDrawer;
+using DebugHelper;
+using DebugHelper.Printables;
 
 namespace Tests
 {
-    public class GizmoDrawerTester : MonoBehaviour
+    public class DebugHelperTester : MonoBehaviour
     {
         [SerializeField]
         private Vector3 _rotationVector;
+
+        internal void Start() {
+            // Writer.Instance.Print("Debug Message", SeverityLevel.DEBUG);
+            // Writer.Instance.Print("Warning Message", SeverityLevel.WARNING);
+            Writer.Instance.Print("Error Message", SeverityLevel.ERROR);
+        }
 
         internal void LateUpdate()
         {

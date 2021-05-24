@@ -1,9 +1,9 @@
 using System;
 
-namespace GizmoDrawer
+namespace DebugHelper
 {
     public interface IPrintable : IEquatable<IPrintable>
     {
-        void Print();
+        string Print();
     }
 }
