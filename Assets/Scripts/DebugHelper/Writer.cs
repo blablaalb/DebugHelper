@@ -10,8 +10,13 @@ namespace DebugHelper
     public class Writer : MonoBehaviour
     {
         private static Writer _instance;
+        [SerializeField]
+        private float _msgHeight = 40f;
+        [SerializeField]
+        private float _msgMargin = 5f;
         private Vector2 _scrollPosition = Vector2.zero;
         private List<UIMessage> _uiMessages = new List<UIMessage>();
+        private bool _closed;
 
         public static Writer Instance
         {
@@ -35,34 +40,66 @@ namespace DebugHelper
 
         internal void OnGUI()
         {
-            float height = Screen.height;
-            float width = Screen.width;
+            if (_uiMessages.Count > 0)
+            {
+                float height = Screen.height;
+                float width = Screen.width;
 
-            _scrollPosition = GUI.BeginScrollView(new Rect(0, 0, width, height), _scrollPosition, new Rect(0, 0, width - 20, height + 1000));
-
-            PrintMessages();
-
-
-            // gstyle.normal.background 
-            // GUI.Box(new Rect(0, height + 1000 - 20, width - 20, 20), $"{_padtp.DateTime}", gstyle);
-            // GUI.Label(new Rect(0, height + 1000 - 20, width - 20, 20),);
-
-            GUI.EndScrollView();
+                if (!_closed)
+                {
+                    _scrollPosition = GUI.BeginScrollView(new Rect(0, 0, width, height), _scrollPosition, new Rect(0, 0, width - 20, height + (_uiMessages.Count * (this._msgHeight + this._msgMargin))));
+                    DrawClearButton();
+                    DrawCloseButton();
+                    PrintMessages();
+                    GUI.EndScrollView();
+                }
+                else DrawOpenButton();
+            }
         }
+
+        private void DrawClearButton()
+        {
+            float btnWidth = 150f;
+            if (GUI.Button(new Rect(0, 0, btnWidth, _msgHeight * 0.8f), "Clear"))
+            {
+                _uiMessages.Clear();
+            }
+        }
+
+        private void DrawCloseButton()
+        {
+            float btnWidth = 150f;
+            if (GUI.Button(new Rect(Screen.width - btnWidth, 0, btnWidth, _msgHeight * 0.8f), "Close"))
+            {
+                _closed = true;
+            }
+        }
+
+        private void DrawOpenButton()
+        {
+            float btnWidth = 150f;
+            if (GUI.Button(new Rect(Screen.width - btnWidth, 0, btnWidth, _msgHeight * 0.8f), "Open"))
+            {
+                _closed = false;
+            }
+        }
+
 
         public void Print(string message, SeverityLevel level)
         {
             Message msg = new Message(message, level);
             if (!_uiMessages.Any(x => x.Printable != null && x.Printable.Equals(msg)))
             {
-                UIMessage uiMsg = new UIMessage(msg, _uiMessages.Count + 1);
+                UIMessage uiMsg = new UIMessage(msg, _uiMessages.Count + 1, _msgHeight, _msgMargin);
                 _uiMessages.Add(uiMsg);
             }
         }
 
         private void PrintMessages()
         {
-            foreach(UIMessage uiMsg in _uiMessages){
+            List<UIMessage> uiMessagesCopy = new List<UIMessage>(_uiMessages);
+            foreach (UIMessage uiMsg in uiMessagesCopy)
+            {
                 uiMsg.Print();
             }
         }

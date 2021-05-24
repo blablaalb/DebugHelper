@@ -8,13 +8,18 @@ namespace DebugHelper.Printables
 {
     public struct UIMessage : IEquatable<UIMessage>
     {
+        private float _height;
+        private float _margin;
+
         public readonly Message Printable;
         public readonly int Count;
 
-        public UIMessage(Message printable, int count)
+        public UIMessage(Message printable, int count, float height, float margin)
         {
             this.Printable = printable;
             this.Count = count;
+            this._height = height;
+            this._margin = margin;
         }
 
         public void Print()
@@ -29,13 +34,12 @@ namespace DebugHelper.Printables
 
         private Rect DrawBox()
         {
-            float height = 40f;
-            float width = Screen.width - 20f;
+            float boxWidth = Screen.width - 20f;
             GUIStyle gstyle = GUI.skin.box;
             gstyle.alignment = TextAnchor.MiddleLeft;
             gstyle.fontSize = 25;
             gstyle.richText = true;
-            Rect rect = new Rect(0, 0, width, height);
+            Rect rect = new Rect(0, (_height + _margin) * Count, boxWidth, _height);
             GUI.Box(rect, $"{Count}", gstyle);
             return rect;
         }

@@ -9,10 +9,14 @@ namespace Tests
         [SerializeField]
         private Vector3 _rotationVector;
 
-        internal void Start() {
-            // Writer.Instance.Print("Debug Message", SeverityLevel.DEBUG);
-            // Writer.Instance.Print("Warning Message", SeverityLevel.WARNING);
-            Writer.Instance.Print("Error Message", SeverityLevel.ERROR);
+        internal void Start()
+        {
+            for (int i = 0; i < 1000; i++)
+            {
+                Writer.Instance.Print("Debug Message", SeverityLevel.DEBUG);
+                Writer.Instance.Print("Warning Message", SeverityLevel.WARNING);
+                Writer.Instance.Print("Error Message", SeverityLevel.ERROR);
+            }
         }
 
         internal void LateUpdate()
