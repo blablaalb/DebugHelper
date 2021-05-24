@@ -1,35 +1,15 @@
 ﻿using System.Collections.Generic;
-using GizmoDrawer.Drawables;
 using System.Collections;
 using UnityEngine;
 using System;
+using GizmoDrawer.Printables;
+using GizmoDrawer.Drawables;
 
 namespace GizmoDrawer
 {
     public class Drawer : MonoBehaviour
     {
-        private struct DrawableAndTimePair : IEquatable<DrawableAndTimePair>
-        {
-            public readonly IDrawable Drawable;
-            public readonly float Time;
-
-            public DrawableAndTimePair(IDrawable drawable, float time)
-            {
-                Drawable = drawable;
-                Time = time;
-            }
-
-            public bool Equals(DrawableAndTimePair other)
-            {
-                return other.Drawable.Equals(this.Drawable) && other.Time.Equals(this.Time);
-            }
-
-            public bool Equals(object other)
-            {
-                return other is DrawableAndTimePair dtp && dtp.Drawable.Equals(this.Drawable) && dtp.Time.Equals(this.Time);
-            }
-        }
-
+        private Writer _writer;
         private static Drawer _instance;
         private List<DrawableAndTimePair> _timedDrawable;
 
@@ -57,11 +37,19 @@ namespace GizmoDrawer
         {
             if (_timedDrawable == null)
                 _timedDrawable = new List<DrawableAndTimePair>();
+            _writer = new Writer();
         }
 
+#if UNITY_EDITOR
         internal void OnDrawGizmos()
         {
             DrawDrawables();
+        }
+#endif 
+
+        internal void OnGUI()
+        {
+            _writer.OnGUI();
         }
 
         public void DrawCube(Vector3 origin, Vector3 size, Quaternion rotation = new Quaternion(), Color color = new Color(), float time = 1f)
@@ -126,3 +114,4 @@ namespace GizmoDrawer
         }
     }
 }
+
