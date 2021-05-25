@@ -17,6 +17,7 @@ namespace DebugHelper
         private Vector2 _scrollPosition = Vector2.zero;
         private List<UIMessage> _uiMessages = new List<UIMessage>();
         private bool _closed;
+        private bool _collapsed;
 
         public static Writer Instance
         {
@@ -49,11 +50,22 @@ namespace DebugHelper
                 {
                     _scrollPosition = GUI.BeginScrollView(new Rect(0, 0, width, height), _scrollPosition, new Rect(0, 0, width - 20, height + (_uiMessages.Count * (this._msgHeight + this._msgMargin))));
                     DrawClearButton();
+                    DrawCollapseButton();
                     DrawCloseButton();
                     PrintMessages();
                     GUI.EndScrollView();
                 }
                 else DrawOpenButton();
+            }
+        }
+
+        private void DrawCollapseButton()
+        {
+            float btnWidth = 150f;
+            string btnText = _collapsed ? "Uncollapsed" : "Collapse";
+            if (GUI.Button(new Rect(Screen.width * 0.5f - btnWidth * 0.5f, 0, btnWidth, _msgHeight * 0.8f), btnText))
+            {
+                _collapsed = !_collapsed;
             }
         }
 
@@ -84,24 +96,25 @@ namespace DebugHelper
             }
         }
 
-
-        public void Print(string message, SeverityLevel level)
+        public void Print(string message, SeverityLevel level = SeverityLevel.DEBUG)
         {
             Message msg = new Message(message, level);
-            if (!_uiMessages.Any(x => x.Printable != null && x.Printable.Equals(msg)))
-            {
-                UIMessage uiMsg = new UIMessage(msg, _uiMessages.Count + 1, _msgHeight, _msgMargin);
-                _uiMessages.Add(uiMsg);
-            }
+            UIMessage uiMsg = new UIMessage(msg, _uiMessages.Count + 1, _msgHeight, _msgMargin);
+            _uiMessages.Add(uiMsg);
         }
 
         private void PrintMessages()
         {
             List<UIMessage> uiMessagesCopy = new List<UIMessage>(_uiMessages);
-            foreach (UIMessage uiMsg in uiMessagesCopy)
+            if (_collapsed)
             {
-                uiMsg.Print();
+                var grouped = uiMessagesCopy.GroupBy(y => y.Message).Select(grp => grp.ToList()).ToList();
+                foreach (var g in grouped) g[0].Print();
             }
+            else foreach (UIMessage uiMsg in uiMessagesCopy)
+                {
+                    uiMsg.Print();
+                }
         }
     }
 }

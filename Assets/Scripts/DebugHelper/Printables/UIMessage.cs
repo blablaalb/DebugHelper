@@ -6,17 +6,17 @@ using System;
 
 namespace DebugHelper.Printables
 {
-    public struct UIMessage : IEquatable<UIMessage>
+    public class UIMessage : IEquatable<UIMessage>, IComparable<UIMessage>, IComparable
     {
         private float _height;
         private float _margin;
 
-        public readonly Message Printable;
+        public readonly Message Message;
         public readonly int Count;
 
         public UIMessage(Message printable, int count, float height, float margin)
         {
-            this.Printable = printable;
+            this.Message = printable;
             this.Count = count;
             this._height = height;
             this._margin = margin;
@@ -29,7 +29,7 @@ namespace DebugHelper.Printables
             gstyle.richText = true;
             gstyle.fontSize = 25;
             rect.x = 30;
-            GUI.Label(rect, Printable.Print(), gstyle);
+            GUI.Label(rect, Message.Print(), gstyle);
         }
 
         private Rect DrawBox()
@@ -46,12 +46,30 @@ namespace DebugHelper.Printables
 
         public bool Equals(UIMessage other)
         {
-            return other.Printable.Equals(this.Printable) && other.Count.Equals(this.Count);
+            Debug.Log("Comparing uimessage");
+            return this.Message.Equals(other.Message) && this.Count.Equals(other.Count);
         }
 
-        public bool Equals(object other)
+        public override bool Equals(object other)
         {
-            return other is UIMessage uiMsg && Equals(uiMsg);
+            return other is UIMessage uiMsg && this.Equals(uiMsg);
+        }
+
+        public int CompareTo(UIMessage other)
+        {
+            Debug.Log("Comparing uimessage");
+            return this.Count.CompareTo(other.Count);
+        }
+
+        public int CompareTo(object obj)
+        {
+            UIMessage other = (UIMessage)obj;
+            return this.CompareTo(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return Count.GetHashCode() * 10;
         }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace DebugHelper.Printables
 {
     [Serializable]
-    public class Message : IPrintable
+    public class Message : IPrintable, IComparable<Message>, IComparable, IEquatable<Message>
     {
         private readonly string _message;
         private readonly SeverityLevel _severityLevel;
@@ -21,10 +21,10 @@ namespace DebugHelper.Printables
                     _colorName = "gray";
                     break;
                 case SeverityLevel.WARNING:
-                _colorName = "yellow";
+                    _colorName = "yellow";
                     break;
                 case SeverityLevel.ERROR:
-                _colorName = "red";
+                    _colorName = "red";
                     break;
             }
         }
@@ -37,13 +37,42 @@ namespace DebugHelper.Printables
         public bool Equals(IPrintable other)
         {
             Message otherPrintable = other as Message;
-            return otherPrintable != null && otherPrintable._message.Equals(this._message) && otherPrintable.Equals(this._severityLevel);
+            return this.Equals(otherPrintable);
         }
 
         public override bool Equals(object other)
         {
             Message otherPrintable = other as Message;
             return otherPrintable != null && Equals(otherPrintable);
+        }
+
+        public bool Equals(Message other)
+        {
+            return other != null &&
+                    this._message.Equals(other._message) &&
+                    this._severityLevel.Equals(other._severityLevel);
+        }
+
+        public int CompareTo(Message other)
+        {
+            Debug.Log($"Comparing {this._message} to {other._message}");
+            if (_message == other._message && _severityLevel == other._severityLevel)
+            {
+                return 0;
+            }
+            return _severityLevel.CompareTo(other._severityLevel);
+        }
+
+        public int CompareTo(object obj)
+        {
+            Message other = obj as Message;
+            Debug.Log($"Comparing {this._message} to {other._message}");
+            return CompareTo(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return _message.GetHashCode() * 7;
         }
     }
 }
